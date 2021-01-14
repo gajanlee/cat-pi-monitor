@@ -1,0 +1,12 @@
+{
+    "server": {
+        "ip": "",
+        "port": "9963",
+        "username": "",
+        "password": ""
+    },
+    "camera": {
+        "mode": "picture",
+        "interval": "5s"
+    }
+}
