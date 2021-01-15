@@ -1,9 +1,7 @@
 {
-    "server": {
+    "service": {
         "ip": "",
-        "port": "9963",
-        "username": "",
-        "password": ""
+        "port": "9963"
     },
     "camera": {
         "mode": "picture",
