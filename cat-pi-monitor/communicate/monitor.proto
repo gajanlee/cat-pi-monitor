@@ -7,6 +7,7 @@ service MonitorService {
   rpc PutMonitorStream (stream MonitorData) returns (MonitorSummary) {}
   rpc PutMonitorSummary (MonitorRequest) returns (MonitorSummary) {}
   rpc GetOperationStream (stream MonitorRequest) returns (stream MonitorOperation) {}
+  rpc GetRealtimeImage (MonitorRequest) returns (MonitorData) {}
 }
 
 message MonitorRequest {

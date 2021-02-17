@@ -29,6 +29,11 @@ class MonitorServiceStub(object):
                 request_serializer=monitor__pb2.MonitorRequest.SerializeToString,
                 response_deserializer=monitor__pb2.MonitorOperation.FromString,
                 )
+        self.GetRealtimeImage = channel.unary_unary(
+                '/Monitor.MonitorService/GetRealtimeImage',
+                request_serializer=monitor__pb2.MonitorRequest.SerializeToString,
+                response_deserializer=monitor__pb2.MonitorData.FromString,
+                )
 
 
 class MonitorServiceServicer(object):
@@ -53,6 +58,12 @@ class MonitorServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetRealtimeImage(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MonitorServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -70,6 +81,11 @@ def add_MonitorServiceServicer_to_server(servicer, server):
                     servicer.GetOperationStream,
                     request_deserializer=monitor__pb2.MonitorRequest.FromString,
                     response_serializer=monitor__pb2.MonitorOperation.SerializeToString,
+            ),
+            'GetRealtimeImage': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetRealtimeImage,
+                    request_deserializer=monitor__pb2.MonitorRequest.FromString,
+                    response_serializer=monitor__pb2.MonitorData.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -129,5 +145,22 @@ class MonitorService(object):
         return grpc.experimental.stream_stream(request_iterator, target, '/Monitor.MonitorService/GetOperationStream',
             monitor__pb2.MonitorRequest.SerializeToString,
             monitor__pb2.MonitorOperation.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetRealtimeImage(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Monitor.MonitorService/GetRealtimeImage',
+            monitor__pb2.MonitorRequest.SerializeToString,
+            monitor__pb2.MonitorData.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
