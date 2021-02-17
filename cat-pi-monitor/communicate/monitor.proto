@@ -4,7 +4,7 @@ package Monitor;
 
 service MonitorService {
   // The monitor is in local network, and put the monitor stream to the server
-  rpc PutMonitorStream (MonitorRequest) returns (stream MonitorData) {}
+  rpc PutMonitorStream (stream MonitorData) returns (MonitorSummary) {}
   rpc PutMonitorSummary (MonitorRequest) returns (MonitorSummary) {}
   rpc GetOperationStream (stream MonitorRequest) returns (stream MonitorOperation) {}
 }

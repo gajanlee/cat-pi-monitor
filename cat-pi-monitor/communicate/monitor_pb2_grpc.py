@@ -14,10 +14,10 @@ class MonitorServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.PutMonitorStream = channel.unary_stream(
+        self.PutMonitorStream = channel.stream_unary(
                 '/Monitor.MonitorService/PutMonitorStream',
-                request_serializer=monitor__pb2.MonitorRequest.SerializeToString,
-                response_deserializer=monitor__pb2.MonitorData.FromString,
+                request_serializer=monitor__pb2.MonitorData.SerializeToString,
+                response_deserializer=monitor__pb2.MonitorSummary.FromString,
                 )
         self.PutMonitorSummary = channel.unary_unary(
                 '/Monitor.MonitorService/PutMonitorSummary',
@@ -34,7 +34,7 @@ class MonitorServiceStub(object):
 class MonitorServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def PutMonitorStream(self, request, context):
+    def PutMonitorStream(self, request_iterator, context):
         """The monitor is in local network, and put the monitor stream to the server
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -56,10 +56,10 @@ class MonitorServiceServicer(object):
 
 def add_MonitorServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'PutMonitorStream': grpc.unary_stream_rpc_method_handler(
+            'PutMonitorStream': grpc.stream_unary_rpc_method_handler(
                     servicer.PutMonitorStream,
-                    request_deserializer=monitor__pb2.MonitorRequest.FromString,
-                    response_serializer=monitor__pb2.MonitorData.SerializeToString,
+                    request_deserializer=monitor__pb2.MonitorData.FromString,
+                    response_serializer=monitor__pb2.MonitorSummary.SerializeToString,
             ),
             'PutMonitorSummary': grpc.unary_unary_rpc_method_handler(
                     servicer.PutMonitorSummary,
@@ -82,7 +82,7 @@ class MonitorService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def PutMonitorStream(request,
+    def PutMonitorStream(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -92,9 +92,9 @@ class MonitorService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/Monitor.MonitorService/PutMonitorStream',
-            monitor__pb2.MonitorRequest.SerializeToString,
-            monitor__pb2.MonitorData.FromString,
+        return grpc.experimental.stream_unary(request_iterator, target, '/Monitor.MonitorService/PutMonitorStream',
+            monitor__pb2.MonitorData.SerializeToString,
+            monitor__pb2.MonitorSummary.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

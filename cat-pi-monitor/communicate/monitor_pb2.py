@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rmonitor.proto\x12\x07Monitor\"#\n\x0eMonitorRequest\x12\x11\n\toperation\x18\x01 \x01(\x08\"-\n\x0bMonitorData\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\"D\n\x0eMonitorSummary\x12\x12\n\nstart_time\x18\x01 \x01(\t\x12\x10\n\x08\x65nd_time\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\t\"2\n\x10MonitorOperation\x12\x0c\n\x04mode\x18\x01 \x01(\t\x12\x10\n\x08interval\x18\x02 \x01(\x05\x32\xf0\x01\n\x0eMonitorService\x12\x45\n\x10PutMonitorStream\x12\x17.Monitor.MonitorRequest\x1a\x14.Monitor.MonitorData\"\x00\x30\x01\x12G\n\x11PutMonitorSummary\x12\x17.Monitor.MonitorRequest\x1a\x17.Monitor.MonitorSummary\"\x00\x12N\n\x12GetOperationStream\x12\x17.Monitor.MonitorRequest\x1a\x19.Monitor.MonitorOperation\"\x00(\x01\x30\x01\x62\x06proto3'
+  serialized_pb=b'\n\rmonitor.proto\x12\x07Monitor\"#\n\x0eMonitorRequest\x12\x11\n\toperation\x18\x01 \x01(\x08\"-\n\x0bMonitorData\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\"D\n\x0eMonitorSummary\x12\x12\n\nstart_time\x18\x01 \x01(\t\x12\x10\n\x08\x65nd_time\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\t\"2\n\x10MonitorOperation\x12\x0c\n\x04mode\x18\x01 \x01(\t\x12\x10\n\x08interval\x18\x02 \x01(\x05\x32\xf0\x01\n\x0eMonitorService\x12\x45\n\x10PutMonitorStream\x12\x14.Monitor.MonitorData\x1a\x17.Monitor.MonitorSummary\"\x00(\x01\x12G\n\x11PutMonitorSummary\x12\x17.Monitor.MonitorRequest\x1a\x17.Monitor.MonitorSummary\"\x00\x12N\n\x12GetOperationStream\x12\x17.Monitor.MonitorRequest\x1a\x19.Monitor.MonitorOperation\"\x00(\x01\x30\x01\x62\x06proto3'
 )
 
 
@@ -231,8 +231,8 @@ _MONITORSERVICE = _descriptor.ServiceDescriptor(
     full_name='Monitor.MonitorService.PutMonitorStream',
     index=0,
     containing_service=None,
-    input_type=_MONITORREQUEST,
-    output_type=_MONITORDATA,
+    input_type=_MONITORDATA,
+    output_type=_MONITORSUMMARY,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

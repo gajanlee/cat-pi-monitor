@@ -1,5 +1,5 @@
 import json
-from pathlib import Path
+from types import SimpleNamespace
 
-def load_config_json(json_path: Path):
-    return json.load(json_path)
+def load_config_json(json_path: str):
+    return json.load(open(json_path), object_hook=lambda d: SimpleNamespace(**d))
