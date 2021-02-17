@@ -22,7 +22,8 @@ class MonitorServicer(monitor_pb2_grpc.MonitorService):
             # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             # cv2.imwrite(filename, image)
 
-            write_base64_to_path(request.data, "/home/lee/Desktop/1.jpg")
+            # write_base64_to_path(request.data, "/home/lee/Desktop/1.jpg")
+        
         
         return monitor_pb2.MonitorSummary(
             start_time="1000",

@@ -5,28 +5,29 @@ import monitor_pb2_grpc
 import base64
 import grpc
 import time
-from photo_utils import get_image_base64_from_path
-
+from photo_utils import get_image_base64_from_path, get_image_base64_from_bytes
+from pi_camera import get_camera_handler
 
 def fetch_server_operation():
     while True:
         yield monitor_pb2.MonitorRequest(operation="fetch")
 
 def image_stream():
-    for i in range(5):
+    camera_handler = get_camera_handler()
+    for i, image_byte in enumerate(camera_handler.get_image_bytes_stream()):
         try:
-            print(f"transfering {i}th image")
+            print(f"transfering image")
 
             yield monitor_pb2.MonitorData(
                 filename=f"{i}.jpg", 
-                data=get_image_base64_from_path("/home/lee/Desktop/test.jpeg"),
+                data=get_image_base64_from_bytes(image_byte),
             )
-            time.sleep(1)
+            time.sleep(2)
         except Exception as ex:
             print(ex)
 
 def run():
-    address = "127.0.0.1"
+    address = "192.168.8.111"
     port = "9963"
 
     channel = grpc.insecure_channel(f"{address}:{port}")
@@ -34,6 +35,8 @@ def run():
 
     # for response in stub.PutMonitorStream(fetch_server_operation()):
     #     (response.mode, response.interval)
+    # for _ in get_camera_handler().get_image_bytes_stream():
+    #     pass
 
     response = stub.PutMonitorStream(image_stream())
 
