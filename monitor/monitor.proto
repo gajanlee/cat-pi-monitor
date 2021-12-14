@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package Monitor;
+
+service Monitor {
+  // The monitor is in local network, and put the monitor stream to the server
+  rpc PutMonitorStream (stream MonitorData) returns (stream MonitorReply) {}
+  rpc GetMonitorStream (stream MonitorRequest) returns (stream MonitorData) {}
+}
+
+message MonitorData {
+  int32 timestamp = 1;
+  string data = 2;
+}
+
+message MonitorReply {
+  int32 reply = 1;
+}
+
+message MonitorRequest {
+  string operation = 1;
+}
