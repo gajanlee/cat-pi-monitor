@@ -1,6 +1,6 @@
 import grpc
 from monitor import monitor_pb2, monitor_pb2_grpc
-import time
+from queue import Queue
 from concurrent import futures
 from monitor.image_utils import write_base64_to_path
 
@@ -8,32 +8,34 @@ from monitor.image_utils import write_base64_to_path
 class MonitorServicer(monitor_pb2_grpc.MonitorService):
 
     def __init__(self):
-        image_queue = Queue()
+        self.image_queue = Queue(5)
 
     def PutMonitorStream(self, request_iterator, context):
         for request in request_iterator:
-            timestamp = request.timestamp
-            base64_image = request.data
+            # Keep the queue is the newest image
+            if self.image_queue.qsize() == 2:
+                self.image_queue.get()
 
-            image_queue.push_image(timestamp, base64_image)
+            self.image_queue.put(monitor_pb2.MonitorData(
+                timestamp = request.timestamp,
+                width = request.width,
+                height = request.height,
+                data = request.data,
+            ))
+
+            print(self.image_queue.qsize(), request.timestamp)
 
             yield monitor_pb2.MonitorReply(
-                reply = queue.count,
+                reply = self.image_queue.qsize(),
             )
     
     def GetMonitorStream(self, request_iterator, context):
         for request in request_iterator:
-            request.timestamp
             if request.operation == "fetch":
-                image = image_queue.pop()
-                yield monitor_pb2.MonitorData(
-                    image.timestamp,
-                    image.base64,
-                )
+                yield self.image_queue.get()
 
 
 def serve(port):
-    port = 50000
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     monitor_pb2_grpc.add_MonitorServiceServicer_to_server(
         MonitorServicer(), server)
@@ -43,4 +45,4 @@ def serve(port):
     server.wait_for_termination()
 
 if __name__ == '__main__':
-    serve()
+    serve(50000)
