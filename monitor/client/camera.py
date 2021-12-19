@@ -56,31 +56,25 @@ class SimpleCameraHandler(CameraHandler):
 class PiCameraHandler(CameraHandler):
 
     def __init__(self):
+        self.width, self.height = 256, 256
         from picamera import PiCamera
         camera = PiCamera()
-        camera.resolution = (1024, 768)
+        camera.resolution = (self.width, self.height)
         camera.start_preview()
 
         self.camera = camera
     
     def get_image_bytes(self):
         image_stream = BytesIO()
-        self.camera.capture(image_stream, 'jpeg')
+        self.camera.capture(image_stream, 'rgb')
         return image_stream.getvalue()
 
     def get_image_byte_stream(self):
         image_stream = BytesIO()
-        for _ in self.camera.capture_continuous(image_stream, "jpeg"):
-            
+        for _ in self.camera.capture_continuous(image_stream, "rgb"):
+            print("capturing pi photo, ", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
             image_stream.seek(0)
-            yield image_stream.read()
+            yield self.width, self.height, image_stream.read()
 
             image_stream.seek(0)
             image_stream.truncate()
-
-
-# camera_handler = None
-# def get_camera_handler():
-#     if not camera_handler:
-#         return CameraHandler()
-#     return camera_handler

@@ -1,4 +1,7 @@
 import base64
+import numpy as np
+import cv2
+import time
 
 def get_image_bytes(image_path):
     with open(image_path, "rb") as f:
@@ -21,6 +24,33 @@ def write_bytes_to_path(image_bytes, image_path):
 def write_base64_to_path(base64_code, image_path):
     image_bytes = decode_base64_to_bytes(base64_code)
     write_bytes_to_path(image_bytes, image_path)
+
+
+def image_byte_to_cv2_image(width, height, byte):
+    # image_array = np.fromstring(decode_base64_to_bytes(byte), np.uint8)
+    image_array = np.frombuffer(byte, np.uint8)
+    image_array = image_array.reshape(width, height, -1)
+    # _, image = cv2.imencode(".jpg", image_array)
+    cv2.putText(image_array, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) , 
+        (0, 20), 
+        cv2.FONT_HERSHEY_SIMPLEX, 
+        0.5,
+        (255, 255, 255),
+        1,
+        2
+    )
+    return image_array
+
+
+def add_timestamp_to_image(image):
+    cv2.putText(image, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) , 
+        (0, 0), 
+        cv2.FONT_HERSHEY_SIMPLEX, 
+        1,
+        (255, 255, 255),
+        1,
+        2
+    )
 
 def compose_photos_to_gif():
     pass
